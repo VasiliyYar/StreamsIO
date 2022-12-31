@@ -6,10 +6,8 @@ public class Basket {
     protected int[] amount;
     protected int[] productNum;
     protected int[] sum;
-
     protected String[] products;
     protected int[] prices;
-
     protected int sumAll;
 
 
@@ -65,8 +63,8 @@ public class Basket {
         }
     }
 
-    static Basket LoadFromTxtFile(File textFile) {
-        try (FileReader in = new FileReader("basket.txt");) {
+    public static Basket LoadFromTxtFile(File textFile) {
+        try (FileReader in = new FileReader(textFile);) {
 
             int currentByte = 0;
             System.out.println();
@@ -80,6 +78,30 @@ public class Basket {
         }
         return null;
     }
+
+    public void saveBin (File file){
+// откроем выходной поток для записи в файл
+        try (FileOutputStream fos = new FileOutputStream(file);
+             ObjectOutputStream oos = new ObjectOutputStream(fos)) {
+// запишем экземпляр класса в файл
+            oos.writeObject(new Basket(amount, productNum, sum, products, prices));
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+   public static Basket loadFromBinFile(File file){
+       Basket basket = LoadFromTxtFile(file);
+// откроем входной поток для чтения файла
+       try (FileInputStream fis = new FileInputStream(file);
+            ObjectInputStream ois = new ObjectInputStream(fis)) {
+// десериализуем объект и скастим его в класс
+           basket = (Basket) ois.readObject();
+       } catch (Exception ex) {
+           System.out.println(ex.getMessage());
+       }
+       System.out.println(basket);
+       return basket;
+   }
 
     public int[] getAmount() {
         return amount;

@@ -57,17 +57,19 @@ public class Main {
                 continue;
             }
 
-            basket.addCart(basket.getAmount(), basket.getProductNum());
+        basket.addCart(basket.getAmount(), basket.getProductNum());
 
         }
 
         basket.printCart(basket.getAmount(), basket.getProductNum(), basket.getSum(), products, prices);
 
 
-        basket.saveTxt(new File("basket.txt"), products, prices);
+       // basket.saveTxt(new File("basket.txt"), products, prices);
 
-        Basket.LoadFromTxtFile(new File("basket.txt"));
+        //Basket.LoadFromTxtFile(new File("basket.txt"));
 
+        basket.saveBin(new File("basket.bin"));
 
+        Basket.loadFromBinFile(new File("basket.bin"));
     }
 }
