@@ -1,7 +1,9 @@
 import java.io.*;
 import java.util.Arrays;
 
-public class Basket {
+public class Basket implements Serializable{
+
+    private static final long serialVersionUID = 1L;
 
     protected int[] amount;
     protected int[] productNum;
@@ -43,7 +45,7 @@ public class Basket {
     }
 
 
-    public void saveTxt(File textFile, String[] products, int[] prices) throws IOException {
+    public void saveTxt(File file, String[] products, int[] prices) throws IOException {
 
         try (FileWriter out = new FileWriter("basket.txt", true);) {
             out.append('\n');
@@ -79,18 +81,25 @@ public class Basket {
         return null;
     }
 
-    public void saveBin (File file){
+    public void saveBin (File file, int[] productNum,  String[] products, int[] prices)throws IOException {
+
 // откроем выходной поток для записи в файл
         try (FileOutputStream fos = new FileOutputStream(file);
              ObjectOutputStream oos = new ObjectOutputStream(fos)) {
 // запишем экземпляр класса в файл
-            oos.writeObject(new Basket(amount, productNum, sum, products, prices));
+
+            oos.writeObject(new Basket(amount,
+                    productNum,
+                    sum,
+                    products,
+                    prices));
+
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
     }
    public static Basket loadFromBinFile(File file){
-       Basket basket = LoadFromTxtFile(file);
+       Basket basket = null;
 // откроем входной поток для чтения файла
        try (FileInputStream fis = new FileInputStream(file);
             ObjectInputStream ois = new ObjectInputStream(fis)) {
@@ -99,8 +108,8 @@ public class Basket {
        } catch (Exception ex) {
            System.out.println(ex.getMessage());
        }
-       System.out.println(basket);
-       return basket;
+       System.out.print(basket);
+       return null;
    }
 
     public int[] getAmount() {
