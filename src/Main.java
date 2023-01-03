@@ -69,7 +69,7 @@ public class Main {
       //Basket.LoadFromTxtFile(new File("basket.txt"));
 
 
-      basket.saveBin(new File("basket.bin"), basket.getProductNum(), products, prices);
+     basket.saveBin(new File("basket.bin"), products, prices);
 
       Basket.loadFromBinFile (new File("basket.bin"));
 

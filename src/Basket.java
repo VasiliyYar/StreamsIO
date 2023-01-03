@@ -81,7 +81,7 @@ public class Basket implements Serializable{
         return null;
     }
 
-    public void saveBin (File file, int[] productNum,  String[] products, int[] prices)throws IOException {
+    public void saveBin (File file, String[] products, int[] prices)throws IOException {
 
 // откроем выходной поток для записи в файл
         try (FileOutputStream fos = new FileOutputStream(file);
