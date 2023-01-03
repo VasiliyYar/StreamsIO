@@ -59,7 +59,7 @@ public class Basket {
 
             out.write("ИТОГО: " + getSumAll() + " рублей");
             out.append('\n');
-            out.flush();
+
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
