@@ -24,6 +24,7 @@ public class Basket {
     public void addCart(int[] amount, int[] productNum) {
         for (int i = 0; i < productNum.length; i++) {
             amount[i] += productNum[i];
+
         }
     }
 
@@ -47,17 +48,19 @@ public class Basket {
 
     public void saveTxt(File textFile, String[] products, int[] prices) throws IOException {
 
-        try (FileWriter out = new FileWriter("basket.txt", true);) {
+        try (FileWriter out = new FileWriter("basket.json", true);) {
+            out.append("\"Ваша корзина:\"");
             out.append('\n');
             for (int i = 0; i < productNum.length; i++) {
                 if (sum[i] > 0) {
-                    out.write(products[i] + " - " + amount[i] + " шт.; (" + prices[i] + " руб/шт); " + sum[i] + " рублей в сумме");
+                    out.write(products[i] + " - " + amount[i] + " шт., (" + prices[i] + " руб/шт), " + sum[i] + " рублей в сумме");
                     out.append('\n');
                 }
             }
 
 
             out.write("ИТОГО: " + getSumAll() + " рублей");
+            out.append('\n');
             out.append('\n');
 
         } catch (IOException ex) {
@@ -66,7 +69,7 @@ public class Basket {
     }
 
     static Basket LoadFromTxtFile(File textFile) {
-        try (FileReader in = new FileReader("basket.txt");) {
+        try (FileReader in = new FileReader("basket.json");) {
 
             int currentByte = 0;
             System.out.println();

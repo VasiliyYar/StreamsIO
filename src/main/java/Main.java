@@ -10,6 +10,7 @@ public class Main {
         System.out.println("Список возможных товаров для покупки:");
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
         Basket basket = new Basket(new int[products.length], new int[products.length], new int[products.length], new String[products.length], new int[products.length]);
+        Clientlog clientlog = new Clientlog(new int[products.length], new int[products.length], new String[products.length]);
         int[] prices = {25, 80, 35};
         for (int i = 0; i < products.length; i++) {
 
@@ -57,17 +58,20 @@ public class Main {
                 continue;
             }
 
-            basket.addCart(basket.getAmount(), basket.getProductNum());
+            //basket.addCart(basket.getAmount(), basket.getProductNum());
+            clientlog.addCart(basket.getAmount(), basket.getProductNum());
+
 
         }
 
-        basket.printCart(basket.getAmount(), basket.getProductNum(), basket.getSum(), products, prices);
+
+         basket.printCart(basket.getAmount(), basket.getProductNum(), basket.getSum(), products, prices);
 
 
-        basket.saveTxt(new File("basket.txt"), products, prices);
+        basket.saveTxt(new File("basket.json"), products, prices);
 
-        Basket.LoadFromTxtFile(new File("basket.txt"));
+        Basket.LoadFromTxtFile(new File("basket.json"));
 
-
+        clientlog.exportASCSV(new File("log.csv"), basket.getAmount());
     }
 }
