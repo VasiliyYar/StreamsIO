@@ -49,7 +49,7 @@ public class Basket {
     public void saveTxt(File textFile, String[] products, int[] prices) throws IOException {
 
         try (FileWriter out = new FileWriter("basket.json", true);) {
-            out.append("\"Ваша корзина:\"");
+            out.append("Ваша корзина:");
             out.append('\n');
             for (int i = 0; i < productNum.length; i++) {
                 if (sum[i] > 0) {

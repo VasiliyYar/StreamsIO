@@ -65,8 +65,7 @@ public class Main {
         }
 
 
-         basket.printCart(basket.getAmount(), basket.getProductNum(), basket.getSum(), products, prices);
-
+        basket.printCart(basket.getAmount(), basket.getProductNum(), basket.getSum(), products, prices);
 
         basket.saveTxt(new File("basket.json"), products, prices);
 
