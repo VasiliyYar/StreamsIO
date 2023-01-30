@@ -1,11 +1,59 @@
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import javax.sound.sampled.Line;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import java.io.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws ParserConfigurationException, TransformerException, IOException, SAXException {
         Scanner scanner = new Scanner(System.in);
+        //Создаем построитель документа
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        // Создается дерево DOM документа из файла. Используем уже имеющийся объект для парсинга xml
+        Document doc = builder.parse(new File("shop.xml"));
+        //Получаем корневой элемент
+        Node root = doc.getDocumentElement();
+
+
+        //Запрашиваем все элементы корневого элемента xml документа
+       NodeList nodeList = root.getChildNodes();
+       for (int i = 0; i < nodeList.getLength(); i++) {
+            Node node = nodeList.item(i);
+            if (Node.ELEMENT_NODE == node.getNodeType()) {
+                System. out.println( "Текущий узел: " + node.getNodeName());
+                Element element = (Element) node;
+                if (node.getNodeName().equals("load")) { //Если условие сработало
+                    element.getElementsByTagName("fileName").item(0).setTextContent("basket.text");//обновим содержание тега
+                    System.out.println("Корректировка load");
+                }if (node.getNodeName().equals("save")) { //Если условие сработало
+                    element.getElementsByTagName("format").item(0).setTextContent("text");//обновим содержание тега
+                    System.out.println("Корректировка save");
+                }if (node.getNodeName().equals("log")) { //Если условие сработало
+                    element.getElementsByTagName("fileName").item(0).setTextContent("client.csv");//обновим содержание тега
+                    System.out.println("Корректировка log");
+                }
+            }
+        }
+        //Сохранение внесенных изменение в xml файл
+        Transformer tr = TransformerFactory.newInstance().newTransformer();
+        DOMSource source = new DOMSource(doc);
+        FileOutputStream fos = new FileOutputStream("shop.xml");
+        StreamResult result = new StreamResult(fos);
+        tr.transform(source, result);
 
         System.out.println("Список возможных товаров для покупки:");
         String[] products = {"Хлеб", "Яблоки", "Молоко"};
