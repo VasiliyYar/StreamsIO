@@ -1,3 +1,4 @@
+import com.opencsv.CSVWriter;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -24,27 +25,65 @@ public class Main {
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         DocumentBuilder builder = factory.newDocumentBuilder();
         // Создается дерево DOM документа из файла. Используем уже имеющийся объект для парсинга xml
-        Document doc = builder.parse(new File("shop.xml"));
+        Document doc = builder.parse("shop.xml");
         //Получаем корневой элемент
         Node root = doc.getDocumentElement();
 
 
         //Запрашиваем все элементы корневого элемента xml документа
-       NodeList nodeList = root.getChildNodes();
-       for (int i = 0; i < nodeList.getLength(); i++) {
+        NodeList nodeList = root.getChildNodes();
+        for (int i = 0; i < nodeList.getLength(); i++) {
             Node node = nodeList.item(i);
             if (Node.ELEMENT_NODE == node.getNodeType()) {
-                System. out.println( "Текущий узел: " + node.getNodeName());
+                System.out.println("Текущий узел: " + node.getNodeName());
                 Element element = (Element) node;
                 if (node.getNodeName().equals("load")) { //Если условие сработало
-                    element.getElementsByTagName("fileName").item(0).setTextContent("basket.text");//обновим содержание тега
-                    System.out.println("Корректировка load");
-                }if (node.getNodeName().equals("save")) { //Если условие сработало
-                    element.getElementsByTagName("format").item(0).setTextContent("text");//обновим содержание тега
-                    System.out.println("Корректировка save");
-                }if (node.getNodeName().equals("log")) { //Если условие сработало
-                    element.getElementsByTagName("fileName").item(0).setTextContent("client.csv");//обновим содержание тега
-                    System.out.println("Корректировка log");
+                    if (element.getAttribute("enabled").equals("false")) {
+                        File file = new File(element.getAttribute("fileName"));
+                        if (element.getAttribute("format").equals("json")) {
+                            FileWriter in = new FileWriter("basket.json");
+                        } else if (element.getAttribute("format").equals("txt")) {
+                            FileWriter in = new FileWriter("basket.txt");
+                        }
+
+                    } else if (element.getAttribute("enabled").equals("true")) {
+                        File file = new File(element.getAttribute("fileName"), String.valueOf(true));
+                        if (element.getAttribute("format").equals("json")) {
+                            FileWriter in = new FileWriter("basket.json", true);
+                        } else if (element.getAttribute("format").equals("txt")) {
+                            FileWriter in = new FileWriter("basket.txt", true);
+                        }
+                    }
+
+                }
+                if (node.getNodeName().equals("save")) { //Если условие сработало
+                    if (element.getAttribute("enabled").equals("true")) {
+                        File file = new File(element.getAttribute("fileName"), String.valueOf(true));
+                        if (element.getAttribute("format").equals("json")) {
+                            FileWriter out = new FileWriter("basket.json", true);
+                        } else if (element.getAttribute("format").equals("txt")) {
+                            FileWriter out = new FileWriter("basket.txt", true);
+                        }
+                    } else if (element.getAttribute("enabled").equals("false")) {
+                        File file = new File(element.getAttribute("fileName"));
+                        if (element.getAttribute("format").equals("json")) {
+                            FileWriter out = new FileWriter("basket.json");
+                        } else if (element.getAttribute("format").equals("txt")) {
+                            FileWriter out = new FileWriter("basket.txt");
+                        }
+
+                    }
+
+                }
+                if (node.getNodeName().equals("log")) { //Если условие сработало
+                    if (element.getAttribute("enabled").equals("true")) {
+                        try (CSVWriter writer = new CSVWriter(new FileWriter("log.csv", true))) {
+
+                        }
+
+                    } else if (element.getAttribute("enabled").equals("false")) {
+                        continue;
+                    }
                 }
             }
         }

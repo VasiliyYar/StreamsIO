@@ -48,7 +48,7 @@ public class Basket {
 
     public void saveTxt(File textFile, String[] products, int[] prices) throws IOException {
 
-        try (FileWriter out = new FileWriter("basket.json", true);) {
+        try (FileWriter out = new FileWriter("basket.json", true)) {
             out.append("Ваша корзина:");
             out.append('\n');
             for (int i = 0; i < productNum.length; i++) {
@@ -69,7 +69,7 @@ public class Basket {
     }
 
     static Basket LoadFromTxtFile(File textFile) {
-        try (FileReader in = new FileReader("basket.json");) {
+        try (FileReader in = new FileReader("basket.json")) {
 
             int currentByte = 0;
             System.out.println();
