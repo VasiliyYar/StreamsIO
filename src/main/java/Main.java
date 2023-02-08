@@ -41,48 +41,30 @@ public class Main {
                     if (element.getAttribute("enabled").equals("false")) {
                         File file = new File(element.getAttribute("fileName"));
                         if (element.getAttribute("format").equals("json")) {
-                            FileWriter in = new FileWriter("basket.json");
-                        } else if (element.getAttribute("format").equals("txt")) {
-                            FileWriter in = new FileWriter("basket.txt");
-                        }
-
-                    } else if (element.getAttribute("enabled").equals("true")) {
-                        File file = new File(element.getAttribute("fileName"), String.valueOf(true));
-                        if (element.getAttribute("format").equals("json")) {
-                            FileWriter in = new FileWriter("basket.json", true);
-                        } else if (element.getAttribute("format").equals("txt")) {
-                            FileWriter in = new FileWriter("basket.txt", true);
+                           Basket.LoadFromTxtFile(new File("basket.json"));
                         }
                     }
-
                 }
                 if (node.getNodeName().equals("save")) { //Если условие сработало
                     if (element.getAttribute("enabled").equals("true")) {
-                        File file = new File(element.getAttribute("fileName"), String.valueOf(true));
-                        if (element.getAttribute("format").equals("json")) {
-                            FileWriter out = new FileWriter("basket.json", true);
-                        } else if (element.getAttribute("format").equals("txt")) {
-                            FileWriter out = new FileWriter("basket.txt", true);
-                        }
-                    } else if (element.getAttribute("enabled").equals("false")) {
                         File file = new File(element.getAttribute("fileName"));
                         if (element.getAttribute("format").equals("json")) {
-                            FileWriter out = new FileWriter("basket.json");
-                        } else if (element.getAttribute("format").equals("txt")) {
-                            FileWriter out = new FileWriter("basket.txt");
+                            String[] products = {"Хлеб", "Яблоки", "Молоко"};
+                            int[] prices = {25, 80, 35};
+                            Basket basket = new Basket(new int[products.length], new int[products.length], new int[products.length], new String[products.length], new int[products.length]);
+                            basket.saveTxt(new File("basket.json"), products, prices);
                         }
-
                     }
-
                 }
                 if (node.getNodeName().equals("log")) { //Если условие сработало
                     if (element.getAttribute("enabled").equals("true")) {
                         try (CSVWriter writer = new CSVWriter(new FileWriter("log.csv", true))) {
-
+                            String[] products = {"Хлеб", "Яблоки", "Молоко"};
+                            Basket basket = new Basket(new int[products.length], new int[products.length], new int[products.length], new String[products.length], new int[products.length]);
+                            Clientlog clientlog = new Clientlog(new int[products.length], new int[products.length], new String[products.length]);
+                            clientlog.exportASCSV(new File("log.csv"), basket.getAmount());
                         }
 
-                    } else if (element.getAttribute("enabled").equals("false")) {
-                        continue;
                     }
                 }
             }
