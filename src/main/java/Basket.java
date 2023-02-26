@@ -1,3 +1,10 @@
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
 import java.io.*;
 import java.util.Arrays;
 
@@ -47,8 +54,10 @@ public class Basket {
 
 
     public void saveTxt(File textFile, String[] products, int[] prices) throws IOException {
+        JSONObject basketJson = new JSONObject();
 
         try (FileWriter out = new FileWriter("basket.json", true)) {
+
             out.append("Ваша корзина:");
             out.append('\n');
             for (int i = 0; i < productNum.length; i++) {
@@ -62,13 +71,13 @@ public class Basket {
             out.write("ИТОГО: " + getSumAll() + " рублей");
             out.append('\n');
             out.append('\n');
-
+            out.flush();
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
     }
 
-    static Basket LoadFromTxtFile(File textFile) {
+    static void LoadFromTxtFile(File textFile) {
         try (FileReader in = new FileReader("basket.json")) {
 
             int currentByte = 0;
@@ -81,7 +90,8 @@ public class Basket {
         } catch (IOException ex) {
             System.out.println(ex.getMessage());
         }
-        return null;
+
+
     }
 
     public int[] getAmount() {

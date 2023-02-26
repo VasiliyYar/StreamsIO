@@ -41,7 +41,7 @@ public class Main {
                     if (element.getAttribute("enabled").equals("false")) {
                         File file = new File(element.getAttribute("fileName"));
                         if (element.getAttribute("format").equals("json")) {
-                           Basket.LoadFromTxtFile(new File("basket.json"));
+                            Basket.LoadFromTxtFile(new File("basket.json"));
                         }
                     }
                 }
